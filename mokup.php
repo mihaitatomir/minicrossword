@@ -16,7 +16,7 @@
 class MiniCrossword
 {
 
-    public static function getJsonData($given_date = null)
+    public static function getJsonData($given_date = null, $max_date = null)
     {
         $json = file_get_contents(getcwd() . '/database.json');
         $records = json_decode($json, true);
@@ -24,6 +24,22 @@ class MiniCrossword
         if (!is_null($given_date) && array_key_exists($given_date, $records))
         {
             return $records[$given_date];
+        }
+
+        if (!is_null($max_date))
+        {
+            $data = [];
+            foreach ($records as $key => $value)
+            {
+                if ($key > $max_date)
+                {
+                    break;
+                }
+
+                $data[$key] = $value;
+            }
+
+            return $data;
         }
 
         return $records;

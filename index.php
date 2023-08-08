@@ -12,6 +12,8 @@
             <input type="date" value="<?= date('Y-m-d') ?>" name="date">
             <button type="submit">Submit</button>
         </form>
+        <hr />
+        <button type="button" id="allData">Get all historical data</button>
     </div>
 
     <div class="container" id="result">
@@ -24,6 +26,28 @@
     </div>
 
     <script>
+        const allDataBtn = document.getElementById('allData');
+        allDataBtn.addEventListener('click', getAllData);
+
+        function getAllData(event)
+        {
+            event.preventDefault();
+
+            result.innerHTML = 'Loading...';
+            var dateValue = 'all';
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST', 'api.php');
+            xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xmlhttp.send('date=' + dateValue);
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200)
+                {
+                    result.innerHTML = this.responseText;
+                }
+            }
+        }
+
         const form = document.getElementById('theForm');
         const result = document.getElementById('result');
         form.addEventListener('submit', logSubmit);
@@ -42,7 +66,7 @@
             xmlhttp.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200)
                 {
-                    result.innerHTML = '<pre>' + this.responseText + '</pre>';
+                    result.innerHTML = this.responseText;
                 }
             }
         }
